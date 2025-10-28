@@ -9,6 +9,7 @@ import (
 	"hci/ufdining/repositories"
 	"hci/ufdining/services"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -20,6 +21,7 @@ func main() {
 
 	// Create MongoClient
 	godotenv.Load(".env")
+
 	user_string := os.Getenv("MONGO_USER_PASSWORD")
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(user_string).SetServerAPIOptions(serverAPI)
@@ -45,6 +47,7 @@ func main() {
 	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
 
 	router := gin.Default()
+	router.Use(cors.Default())
 	router.GET("/restaurants", restuarantHandler.GetRestaurants)
 	router.GET("/restaurants/:id/menu", restuarantHandler.GetMenuByRestaurantID)
 	router.POST("/rating", restuarantHandler.UpdateNewRating)
