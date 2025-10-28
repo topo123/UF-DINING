@@ -8,6 +8,7 @@ import (
 	"hci/ufdining/handlers"
 	"hci/ufdining/repositories"
 	"hci/ufdining/services"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -20,6 +21,7 @@ func main() {
 
 	// Create MongoClient
 	godotenv.Load(".env")
+
 	user_string := os.Getenv("MONGO_USER_PASSWORD")
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI(user_string).SetServerAPIOptions(serverAPI)
