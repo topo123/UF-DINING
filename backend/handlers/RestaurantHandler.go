@@ -15,7 +15,12 @@ func NewRestaurantHandler(service services.RestaurantService) *restaurantHandler
 }
 
 func (h *restaurantHandler) GetRestaurants(c *gin.Context) {
-	// Implementation to handle getting restaurants
+	restaurants, err := h.service.GetRestaurants()
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(200, restaurants)
 }
 
 func (h *restaurantHandler) GetMenuByRestaurantID(c *gin.Context) {

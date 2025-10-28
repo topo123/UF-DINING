@@ -34,7 +34,7 @@ func main() {
 		}
 	}()
 
-	restaurantRepo := repositories.NewRestaurantRepository(client)
+	restaurantRepo := repositories.NewRestaurantRepository(client, "Dining", "Restaurants", "Menu_Items")
 	restaurantService := services.NewRestaurantService(restaurantRepo)
 	restuarantHandler := handlers.NewRestaurantHandler(restaurantService)
 

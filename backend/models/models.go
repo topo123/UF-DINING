@@ -1,21 +1,23 @@
 package models
 
+import "go.mongodb.org/mongo-driver/v2/bson"
+
 type Restaurant struct {
-	ID        string `bson:"_id,omitempty"`
-	name      string `bson:"name"`
-	openTime  string `bson:"open_time"`
-	closeTime string `bson:"close_time"`
-	thumbnail string `bson:"thumbnail"`
-	address   string `bson:"address"`
+	ID        bson.ObjectID `bson:"_id,omitempty"`
+	Name      string        `bson:"name"`
+	OpenTime  string        `bson:"open_time"`
+	CloseTime string        `bson:"close_time"`
+	Thumbnail string        `bson:"thumbnail"`
+	Address   string        `bson:"address"`
 }
 
 type MenuItem struct {
-	ID           string   `bson:"_id,omitempty"`
-	restaurantID string   `bson:"restaurant_id"`
-	price        float64  `bson:"price"`
-	name         string   `bson:"name"`
-	rateCount    int      `bson:"rate_count"`
-	starCount    int      `bson:"star_count"`
-	thumbnail    string   `bson:"thumbnail"`
-	attributes   []string `bson:"attributes"`
+	ID           bson.ObjectID `bson:"_id,omitempty"`
+	RestaurantID string        `bson:"restaurant_id"`
+	Price        float64       `bson:"price"`
+	Name         string        `bson:"name"`
+	RateCount    int           `bson:"rate_count"`
+	StarCount    int           `bson:"star_count"`
+	Thumbnail    string        `bson:"thumbnail"`
+	Attributes   []string      `bson:"attributes"`
 }
