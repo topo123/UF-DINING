@@ -13,7 +13,7 @@ type Restaurant struct {
 
 type MenuItem struct {
 	ID           bson.ObjectID `bson:"_id,omitempty"`
-	RestaurantID string        `bson:"restaurant_id"`
+	RestaurantID bson.ObjectID `bson:"restaurant_id"`
 	Price        float64       `bson:"price"`
 	Name         string        `bson:"name"`
 	RateCount    int           `bson:"rate_count"`
