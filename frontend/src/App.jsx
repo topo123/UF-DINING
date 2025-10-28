@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { Link } from 'react-router-dom';
+import RestaurantPage from './RestaurantPage';
 
 function App() {
   const[restaurants, setRestaurants] = useState([]);
@@ -20,6 +22,7 @@ function App() {
         setLoading(false);
       });
   }, []);
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -45,7 +48,11 @@ function App() {
 
       <div className="card-container">
         {filteredRestaurants.map((restaurant) => (
-          <div className='restaurant-card' key={restaurant.ID}>
+          <Link 
+            to={`/restaurant/${restaurant.ID}`} 
+            key={restaurant.ID} 
+            className="restaurant-card"
+          >
             {restaurant.Thumbnail && (
               <img 
                 src={restaurant.Thumbnail} 
@@ -56,7 +63,7 @@ function App() {
             <h2 className='restaurant-name'>{restaurant.Name}</h2>
             <p>{restaurant.Address}</p>
             <p>{restaurant.OpenTime} - {restaurant.CloseTime}</p>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

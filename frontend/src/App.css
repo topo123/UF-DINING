@@ -53,6 +53,8 @@ body {
 }
 
 .restaurant-card {
+  text-decoration: none;
+  color: inherit;
   background-color: var(--card-bg-color);
   width: 18rem;
   padding: 1rem;
