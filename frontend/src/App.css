@@ -1,11 +1,52 @@
 :root {
   background-color: #242424;
+}
 
+.App{
+  font-family: poppins, sans-serif;
 }
 
 .title {
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   font-size: 4rem;
   color: #2c3e50;
   text-align: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #000000;
+}
+
+.search-bar {
+  padding: 0.7rem;
+  width: 30rem;
+  margin: 0 auto 3rem auto;
+  display: block;
+  font-size: 1rem;
+  border-radius: 1.5rem;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.restaurant-card {
+  background-color: #b3b3f2;
+  border-radius: 1rem;
+  border: 1px solid #000000;
+  padding: 1rem;
+  width: 18rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-5px);
+}
+
+.restaurant-name {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
