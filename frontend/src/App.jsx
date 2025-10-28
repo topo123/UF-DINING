@@ -46,9 +46,6 @@ function App() {
       <div className="card-container">
         {filteredRestaurants.map((restaurant) => (
           <div className='restaurant-card' key={restaurant.ID}>
-            <h2 className='restaurant-name'>{restaurant.Name}</h2>
-            <p>Address: {restaurant.Address}</p>
-            <p>Hours: {restaurant.OpenTime} - {restaurant.CloseTime}</p>
             {restaurant.Thumbnail && (
               <img 
                 src={restaurant.Thumbnail} 
@@ -56,6 +53,9 @@ function App() {
                 className="thumbnail" 
               />
             )}
+            <h2 className='restaurant-name'>{restaurant.Name}</h2>
+            <p>{restaurant.Address}</p>
+            <p>{restaurant.OpenTime} - {restaurant.CloseTime}</p>
           </div>
         ))}
       </div>
