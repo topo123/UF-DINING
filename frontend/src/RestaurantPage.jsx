@@ -5,17 +5,27 @@ import './RestaurantPage.css'
 
 
 function StarBar({ rating }) {
+  rating = parseFloat(rating);
   const stars = [];
+
+  const fullStars = Math.floor(rating);
+  const decimal = rating - fullStars;
+
+  const hasHalf = decimal >= 0.25 && decimal < 0.75;
+  const hasExtraFull = decimal >= 0.75;
+
   for (let i = 1; i <= 5; i++) {
-    if (i <= Math.floor(rating)) {
+    if (i <= fullStars) {
       stars.push(<span key={i} className="star-filled">★</span>);
-    } else if (i - rating < 1) {
+    } else if (i === fullStars + 1 && hasHalf) {
       stars.push(<span key={i} className="star-half">★</span>);
+    } else if (i === fullStars + 1 && hasExtraFull) {
+      stars.push(<span key={i} className="star-filled">★</span>);
     } else {
       stars.push(<span key={i} className="star-empty">★</span>);
     }
   }
-  return <div className="star-bar">{stars}</div>;
+  return <div className="star-bar">{rating}{stars}</div>;
 }
 
 function RestaurantPage() {

@@ -69,17 +69,20 @@
 }
 
 .star-half {
-    color: #ffe234;  
-    position: relative;
+  position: relative;
+  display: inline-block;
+  color: #555;
 }
 
-.star-half::after {
+
+.star-half::before {
   content: '★';
-  color: #555;
   position: absolute;
-  left: 50%;
+  left: 0;
   width: 50%;
   overflow: hidden;
+  color: #ffe234;
+  z-index: 1;
 }
 
 .star-empty {
