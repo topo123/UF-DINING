@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Link } from 'react-router-dom';
-import RestaurantPage from './RestaurantPage';
 
 function App() {
   const[restaurants, setRestaurants] = useState([]);
-  const[loading, setLoading] = useState(true);
   const[searchTerm, setSearchTerm] = useState("");
 
 
@@ -15,18 +13,13 @@ function App() {
       .then((data) => {
         console.log(data);
         setRestaurants(data);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching restaurants:", error);
-        setLoading(false);
       });
   }, []);
 
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   const filteredRestaurants = restaurants.filter((restaurant) =>
     restaurant.Name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -52,6 +45,7 @@ function App() {
             to={`/restaurant/${restaurant.ID}`} 
             key={restaurant.ID} 
             className="restaurant-card"
+            state={{ restaurant}}
           >
             {restaurant.Thumbnail && (
               <img 

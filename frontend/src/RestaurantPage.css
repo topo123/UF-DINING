@@ -1,0 +1,91 @@
+.App{
+    padding: 2rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--primary-color);
+    text-align: center;
+    background-color: var(--bg-color);
+}
+
+.card-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.menu-item-card{
+    background-color: var(--card-bg-color);
+    width: 18rem;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.menu-item-card:hover {
+  transform: translateY(-5px);
+}
+
+.menu-item-details {
+  padding: 1rem;
+}
+
+.menu-item-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.menu-item-price {
+  font-weight: bold;
+  color: var(--accent-color);
+  margin-bottom: 0.3rem;
+}
+
+.menu-item-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.no-menu {
+  font-style: italic;
+  color: #888;
+  margin-top: 1rem;
+}
+
+.star-bar {
+  display: flex;
+  gap: 0.1rem;
+}
+
+.star-filled {
+  color: #ffe234;
+}
+
+.star-half {
+    color: #ffe234;  
+    position: relative;
+}
+
+.star-half::after {
+  content: '★';
+  color: #555;
+  position: absolute;
+  left: 50%;
+  width: 50%;
+  overflow: hidden;
+}
+
+.star-empty {
+  color: #555;
+}
+
+.review-count {
+  color: #888;
+}

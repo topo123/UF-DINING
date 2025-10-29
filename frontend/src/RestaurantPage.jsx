@@ -1,14 +1,83 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { useParams, useLocation } from 'react-router-dom';
+import './RestaurantPage.css'
+
+
+function StarBar({ rating }) {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    if (i <= Math.floor(rating)) {
+      stars.push(<span key={i} className="star-filled">★</span>);
+    } else if (i - rating < 1) {
+      stars.push(<span key={i} className="star-half">★</span>);
+    } else {
+      stars.push(<span key={i} className="star-empty">★</span>);
+    }
+  }
+  return <div className="star-bar">{stars}</div>;
+}
 
 function RestaurantPage() {
-  const { id } = useParams();
-  
+  const { state } = useLocation();
+  const[menu, setMenu] = useState([]);
+  const restaurant  = state?.restaurant;
+
+  if (!restaurant) {
+    return <div>No data found for this restaurant.</div>
+  }
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setMenu(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching Menu:", error);
+      });
+  }, [restaurant]);
+
+
   return (
-    <div>
-        <h1>Restaurant Page for ID: {id}</h1>
-    </div>
-  );
+    <div className="App">
+      <div>
+          <h1>{restaurant.Name}</h1>
+          <p>{restaurant.Address}</p>
+          <p>{restaurant.OpenTime} - {restaurant.CloseTime}</p>
+      </div>
+      <div className="card-container">
+        {!menu || menu.length === 0 ? (
+          <p className='no-menu'>No menu items available.</p>
+        ) : (
+          menu.map((item) => (
+              <div key={item.ID} className="menu-item-card">
+                {item.Thumbnail && (
+                  <img 
+                    src={item.Thumbnail} 
+                    alt={item.Name} 
+                    className="thumbnail" 
+                  />
+                )}
+                <div className='menu-item-details'>
+                  <h2 className='menu-item-name'>{item.Name}</h2>
+                  <p className='menu-item-price'>${item.Price.toFixed(2)}</p>
+                  <div className='menu-item-rating'>
+                    {item.RateCount > 0 ? (
+                      <>
+                        <StarBar rating={(item.StarCount / item.RateCount).toFixed(1)} />
+                        <span className='review-count'>({item.RateCount})</span>
+                      </>
+                    )  :  "No ratings"}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
 }
 
 export default RestaurantPage;
