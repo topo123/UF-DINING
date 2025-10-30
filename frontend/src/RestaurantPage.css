@@ -135,7 +135,8 @@
 }
 
 .menu-item-calories{
-  text-align: right;
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
   font-family: "Roboto", sans-serif;
   font-size: 15px;
   color: #808080;
