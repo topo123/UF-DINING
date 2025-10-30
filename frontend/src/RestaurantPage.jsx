@@ -85,9 +85,33 @@ function RestaurantPage() {
                       <span 
                       key={attr} 
                       className={`${attr}`}
-                      style={{display: 'block', marginBottom: '4px'}}
                       >
-                        🏷️ {attr}
+                        🏷️{attr}
+                        {attr === "Vegan" && (
+                        <svg
+                          className="tag-badge"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          style={{ marginLeft: "4px" }}
+                        >
+                          <circle cx="8" cy="8" r="8" fill="#4CAF50"/>
+                          <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">VG</text>
+                      </svg>
+                        )}
+                        {attr === "Vegetarian" && (
+                          <svg
+                            className="tag-badge"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            style={{ marginLeft: "4px" }}
+                          >
+                            <circle cx="8" cy="8" r="8" fill = "#FF9800"/>
+                            <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">V</text>
+                          </svg>
+                        )}
+                        {" "}
                       </span>
                     ))}
                     </div>
