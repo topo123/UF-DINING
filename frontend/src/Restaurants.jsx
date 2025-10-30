@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import './Restaurants.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StarBar } from './RestaurantPage';
+import { useAuth } from './AuthContext.jsx';
 
 function Restaurants() {
   const[restaurants, setRestaurants] = useState([]);
   const[searchTerm, setSearchTerm] = useState("");
   const[restaurantRatings, setRestaurantRatings] = useState({});
+  const {user} = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:8080/restaurants")
@@ -36,11 +39,31 @@ function Restaurants() {
     restaurant.Name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const goToProfile = () => {
+    navigate('/profile');
+  };
+
   return (
     <div className="App">
-      <h1 className='title'>
-        Dinr        
-      </h1>
+
+      <div className="header">
+        <h1 className='title'>
+          Dinr        
+        </h1>
+
+        <div className="profile-section" onClick={goToProfile}>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            alt="Profile"
+            className="profile-avatar"
+          />
+          {user && (
+            <p className="profile-uid">{user.uid}</p>
+          )}
+        </div>
+      </div>
+
+
 
       <input
         type="text"

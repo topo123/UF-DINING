@@ -1,20 +1,40 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import { Link } from 'react-router-dom';
-import { StarBar } from './RestaurantPage';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+import { auth } from './firebase';
 import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSignup, setIsSignup] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    console.log('Login attempt with:', { email, password });
-    navigate('/restaurants');
+    try {
+      if (isSignup) {
+        await createUserWithEmailAndPassword(auth, email, password);
+        console.log("✅ Signed up successfully!");
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+        console.log("✅ Logged in successfully!");
+      }
+      navigate('/restaurants');
+    } catch (err) {
+      console.error("Authentication failed:", err);
+      setError("Invalid email or password.");
+    }
+
   };
+
+  const toggleMode = () => {
+    setIsSignup(!isSignup);
+    setError("");
+  }
   
   return (
     <div className="App">
@@ -23,6 +43,8 @@ function App() {
       </h1>
       <div className="login-container">
         <form onSubmit={handleSubmit} className="login-form">
+          <h2>{isSignup ? "Sign Up" : "Log In"}</h2>
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -34,6 +56,7 @@ function App() {
               placeholder="Enter your email"
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -45,9 +68,19 @@ function App() {
               placeholder="Enter your password"
             />
           </div>
+          {error && <p className="error-message">{error}</p>}
           <button type="submit" className="login-button">
-            Log In
+            {isSignup ? "Sign Up" : "Log In"}
           </button>
+
+          <button
+            type="button"
+            className="switch-button"
+            onClick={toggleMode}
+            >
+            {isSignup ? "Already have an account? Log In" : "Don't have an account? Sign Up"}
+          </button>
+            
         </form>
       </div>
     </div>
