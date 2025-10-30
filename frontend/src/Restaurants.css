@@ -86,3 +86,12 @@ body {
 .restaurant-rating {
   color: #bbb;
 }
+
+.editable-stars .star-filled {
+  font-size: 1.2rem;
+}
+
+.editable-stars .star-empty {
+  color: #777;
+  font-size: 1.2rem;
+}

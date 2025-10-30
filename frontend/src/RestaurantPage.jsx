@@ -33,6 +33,38 @@ export function StarBar({ rating }) {
   );
 }
 
+function EditableStarBar({ rating, onRate }) {
+  const [hover, setHover] = useState(0);
+
+  const displayRating = hover || rating;
+
+  return (
+    <div className="editable-stars" style={{ display: "flex", cursor: "pointer" }}>
+      {[1, 2, 3, 4, 5].map((star) => {
+        let starClass = "star-empty";
+        if (displayRating >= star) starClass = "star-filled";
+        else if (displayRating >= star - 0.5) starClass = "star-half";
+
+        return (
+          <span
+            key={star}
+            className={starClass}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+            onClick={() => onRate(star)}
+            style={{ fontSize: "1.2rem", marginRight: "2px" }}
+          >
+            ★
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+
+
+
 function RestaurantPage() {
   const { state } = useLocation();
   const[menu, setMenu] = useState([]);
@@ -40,6 +72,7 @@ function RestaurantPage() {
   const [priceLimit, setPriceLimit] = useState(30);
   const [calorieLimit, setCalorieLimit] = useState(1000);
   const [minRating, setMinRating] = useState(0);
+  const [userRatings, setUserRatings] = useState({});
 
   if (!restaurant) {
     return <div>No data found for this restaurant.</div>
@@ -65,6 +98,32 @@ function RestaurantPage() {
       avgRating >= minRating
     )
   }))
+  
+  const handleUserRate = (itemId, value) => {
+  setUserRatings((prev) => ({
+    ...prev,
+    [itemId]: value,
+  }));
+
+  fetch('http://localhost:8080/rating', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      itemId: itemId,
+      userId: currentUser.id, 
+      rating: value
+    }),
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Failed to submit rating');
+    return res.json();
+  })
+  .then(data => {
+    console.log('Rating submitted successfully', data);
+  })
+  .catch(err => console.error(err));
+};
+
 
   return (
     <div className="App">
@@ -164,6 +223,13 @@ function RestaurantPage() {
                       </span>
                     ))}
                     </div>
+                    <div className="menu-item-user-rating">
+                    <EditableStarBar
+                      rating={userRatings[item.ID] || 0}
+                      onRate={(value) => handleUserRate(item.ID, value)}
+                    />
+                    {(userRatings[item.ID] || 0) > 0 && <span> Your rating: {(userRatings[item.ID] || 0).toFixed(1)}</span>}
+                  </div>
                 </div>
               </div>
             ))
