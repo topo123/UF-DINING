@@ -1,0 +1,88 @@
+:root {
+  --bg-color: #1a1a1a;
+  --card-bg-color: #2b2b2b;
+  --primary-color: #ffffff;
+  --accent-color: #ff4500;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  font-family: 'Inter', sans-serif;
+  color: var(--primary-color)
+}
+
+.App {
+  padding: 2rem;
+  text-align: center;
+}
+
+.title{
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--accent-color);
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.search-bar {
+  width: 19rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #444;
+  background-color: #1f1f1f;
+  color: var(--primary-color);
+  outline: none;
+  margin-bottom: 2rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0.25rem;
+}
+
+.search-bar:focus {
+  border-color: var(--accent-color);
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.restaurant-card {
+  text-decoration: none;
+  color: inherit;
+  background-color: var(--card-bg-color);
+  width: 18rem;
+  padding: 1rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.restaurant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.restaurant-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.restaurant-address,
+.restaurant-hours {
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-bottom: 0.3rem
+}
+
+.restaurant-rating {
+  color: #bbb;
+}

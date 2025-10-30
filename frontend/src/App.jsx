@@ -2,74 +2,53 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { Link } from 'react-router-dom';
 import { StarBar } from './RestaurantPage';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
-  const[restaurants, setRestaurants] = useState([]);
-  const[searchTerm, setSearchTerm] = useState("");
-  const[restaurantRatings, setRestaurantRatings] = useState({});
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch("http://localhost:8080/restaurants")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setRestaurants(data);
-        
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        data.forEach((restaurant) => {
-          fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`).then((res) => res.json()).then((menuItems) => {
-            const totalStars = menuItems.reduce((sum, item) => sum + (item.StarCount || 0), 0);
-            const totalRates = menuItems.reduce((sum, item) => sum + (item.RateCount || 0), 0);
-            const avgRating = totalRates > 0 ? (totalStars / totalRates).toFixed(1) : "N/A";
-            setRestaurantRatings((prev) => ({ ...prev, [restaurant.ID]: avgRating }));
-          })
-        })
-      })
-      .catch((error) => {
-        console.error("Error fetching restaurants:", error);
-      });
-  }, []);
-
-
-
-  const filteredRestaurants = restaurants.filter((restaurant) =>
-    restaurant.Name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+    console.log('Login attempt with:', { email, password });
+    navigate('/restaurants');
+  };
+  
   return (
     <div className="App">
       <h1 className='title'>
         Dinr        
       </h1>
-
-      <input
-        type="text"
-        placeholder="Search restaurants..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="search-bar"
-      />
-
-      <div className="card-container">
-        {filteredRestaurants.map((restaurant) => (
-          <Link 
-            to={`/restaurant/${restaurant.ID}`} 
-            key={restaurant.ID} 
-            className="restaurant-card"
-            state={{ restaurant}}
-          >
-            <h2 className='restaurant-name'>{restaurant.Name}</h2>
-            <p>{restaurant.Address}</p>
-            <p>{restaurant.OpenTime} - {restaurant.CloseTime}</p>
-            {restaurantRatings[restaurant.ID] != undefined && restaurantRatings[restaurant.ID] !== "N/A" ? (
-              <div className="restaurant-rating">
-                <StarBar rating={restaurantRatings[restaurant.ID]} />
-              </div>
-            ) : (
-              <p>No ratings yet</p>
-            )}
-          </Link>
-        ))}
+      <div className="login-container">
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="Enter your email"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Enter your password"
+            />
+          </div>
+          <button type="submit" className="login-button">
+            Log In
+          </button>
+        </form>
       </div>
     </div>
   );
