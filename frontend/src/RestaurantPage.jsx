@@ -4,7 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import './RestaurantPage.css'
 
 
-function StarBar({ rating }) {
+export function StarBar({ rating }) {
   rating = parseFloat(rating);
   const stars = [];
 
