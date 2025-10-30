@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"hci/ufdining/models"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -12,6 +13,7 @@ type RestaurantRepository interface {
 	GetRestaurants(ctx context.Context) ([]models.Restaurant, error)
 	GetMenuByRestaurantID(ctx context.Context, restaurantID string) ([]models.MenuItem, error)
 	UpdateNewRating(ctx context.Context, menuItemID string, rating int) error
+	GetRating(ctx context.Context, userID string, menuItemID string) (int32, error)
 }
 
 type restaurantRepo struct {
@@ -20,14 +22,48 @@ type restaurantRepo struct {
 	collectionName          string
 	menuItemsCollectionName string
 	resCollectionName       string
+	reviewCollectionName    string
 }
 
-func NewRestaurantRepository(client *mongo.Client, dbName string, resCollectionName string, menuItemsCollectionName string) RestaurantRepository {
+func NewRestaurantRepository(client *mongo.Client, dbName string, resCollectionName string, menuItemsCollectionName string, review string) RestaurantRepository {
 	return &restaurantRepo{
 		dbClient:                client,
 		dbName:                  dbName,
 		resCollectionName:       resCollectionName,
-		menuItemsCollectionName: menuItemsCollectionName}
+		menuItemsCollectionName: menuItemsCollectionName,
+		reviewCollectionName:    review}
+}
+
+func (r *restaurantRepo) GetRating(ctx context.Context, userID string, menuItemID string) (int32, error) {
+	collection := r.dbClient.Database(r.dbName).Collection(r.reviewCollectionName)
+
+	menuItemObjectID, err := bson.ObjectIDFromHex(menuItemID)
+
+	if err != nil {
+		return -1, err
+	}
+
+	cursor, err := collection.Find(ctx, bson.M{"menu_item_id": menuItemObjectID})
+
+	if err != nil {
+		return -1, err
+	}
+
+	defer cursor.Close(ctx)
+
+	if !cursor.Next(ctx) {
+		fmt.Print("Did not find a document for the collection")
+		return -1, nil
+	}
+
+	var review models.Review
+	err = cursor.Decode(&review)
+
+	if err != nil {
+		return -1, err
+	}
+
+	return review.Rating, nil
 }
 
 func (r *restaurantRepo) GetRestaurants(ctx context.Context) ([]models.Restaurant, error) {
