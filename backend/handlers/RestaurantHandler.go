@@ -19,6 +19,26 @@ type UpdateNewRatingRequest struct {
 	Rating     int    `json:"rating"`
 }
 
+func (h *restaurantHandler) GetRating(c *gin.Context) {
+	menuItemID, found := c.Params.Get("menu_id")
+	if !found {
+		c.JSON(400, gin.H{"error": "menu_id parameter is required"})
+	}
+	userID, found := c.Params.Get("user_id")
+	if !found {
+		c.JSON(400, gin.H{"error": "user_id parameter is required"})
+	}
+
+	rating, err := h.service.GetRating(c, userID, menuItemID)
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, rating)
+}
+
 func (h *restaurantHandler) GetRestaurants(c *gin.Context) {
 	restaurants, err := h.service.GetRestaurants(c)
 	if err != nil {

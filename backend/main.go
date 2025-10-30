@@ -36,7 +36,7 @@ func main() {
 		}
 	}()
 
-	restaurantRepo := repositories.NewRestaurantRepository(client, "Dining", "Restaurants", "Menu_Items")
+	restaurantRepo := repositories.NewRestaurantRepository(client, "Dining", "Restaurants", "Menu_Items", "Reviews")
 	restaurantService := services.NewRestaurantService(restaurantRepo)
 	restuarantHandler := handlers.NewRestaurantHandler(restaurantService)
 
@@ -46,10 +46,12 @@ func main() {
 	}
 	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
 
+	//TODO: Has user reviewed a menu item, thingy endpoint
 	router := gin.Default()
 	router.Use(cors.Default())
 	router.GET("/restaurants", restuarantHandler.GetRestaurants)
 	router.GET("/restaurants/:id/menu", restuarantHandler.GetMenuByRestaurantID)
+	router.GET("/rating/:menu_id/menu/:user_id/user", restuarantHandler.GetRating)
 	router.POST("/rating", restuarantHandler.UpdateNewRating)
 
 	router.Run(":8080")

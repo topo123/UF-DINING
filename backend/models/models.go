@@ -22,3 +22,10 @@ type MenuItem struct {
 	Thumbnail    string        `bson:"thumbnail"`
 	Attributes   []string      `bson:"attributes"`
 }
+
+type Review struct {
+	ID         bson.ObjectID `bson:"_id,omitempty"`
+	MenuItemID bson.ObjectID `bson:"menu_item_id"`
+	UserID     string        `bson:"user_id"`
+	Rating     int32         `bson:"rating"`
+}

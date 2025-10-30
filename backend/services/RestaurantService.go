@@ -10,6 +10,7 @@ type RestaurantService interface {
 	GetRestaurants(ctx context.Context) ([]models.Restaurant, error)
 	GetMenuByRestaurantID(ctx context.Context, restaurantID string) ([]models.MenuItem, error)
 	UpdateNewRating(ctx context.Context, menuItemID string, rating int) error
+	GetRating(ctx context.Context, userID string, menuItemID string) (int32, error)
 }
 
 type restaurantService struct {
@@ -30,4 +31,8 @@ func (s *restaurantService) GetMenuByRestaurantID(ctx context.Context, restauran
 
 func (s *restaurantService) UpdateNewRating(ctx context.Context, menuItemID string, rating int) error {
 	return s.repo.UpdateNewRating(ctx, menuItemID, rating)
+}
+
+func (s *restaurantService) GetRating(ctx context.Context, userID string, menuItemID string) (int32, error) {
+	return s.repo.GetRating(ctx, userID, menuItemID)
 }
