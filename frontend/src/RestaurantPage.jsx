@@ -81,11 +81,22 @@ function RestaurantPage() {
                   <div className='menu-item-rating'>
                     {item.RateCount > 0 ? (
                       <>
-                        <StarBar rating={(item.StarCount / item.RateCount)} />
+                        <StarBar rating={(item.StarCount / item.RateCount).toFixed(1)} />
                         <span className='review-count'>({item.RateCount})</span>
                       </>
                     )  :  "No ratings"}
                   </div>
+                  <div className='menu-item-tags'>
+                    {item.Attributes && item.Attributes.length > 0 && item.Attributes.map((attr) => (
+                      <span 
+                      key={attr} 
+                      className={`${attr}`}
+                      style={{display: 'block', marginBottom: '4px'}}
+                      >
+                        🏷️ {attr}
+                      </span>
+                    ))}
+                    </div>
                 </div>
               </div>
             ))

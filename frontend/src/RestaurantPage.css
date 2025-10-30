@@ -61,6 +61,7 @@
   gap: 0.25rem;
   font-size: 0.9rem;
   color: #bbb;
+  margin-bottom: 8px;
 }
 
 .no-menu {
@@ -119,3 +120,16 @@
   color: #888;
 }
 
+
+
+.Vegan{
+  color: #4CAF50;
+}
+
+.Vegetarian{
+  color: #FFB74D
+}
+
+.menu-item-tags{
+  font-family: 'Roboto', sans-serif
+}
