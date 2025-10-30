@@ -131,9 +131,12 @@
 }
 
 .menu-item-tags{
-  font-family: 'Roboto', sans-serif
+  font-family: 'Roboto', sans-serif;
 }
 
 .menu-item-calories{
-  margin-left: 250px;
+  text-align: right;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  color: #808080;
 }

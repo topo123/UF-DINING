@@ -69,6 +69,8 @@ function RestaurantPage() {
           menu.map((item) => (
               <div key={item.ID} className="menu-item-card">
                 <div className='menu-item-details'>
+                  <div className = 'menu-item-calories'>{item.Calories} calories
+                    </div>
                   <h2 className='menu-item-name'>{item.Name}
                     </h2>
                   <p className='menu-item-price'>${item.Price.toFixed(2)}</p>
