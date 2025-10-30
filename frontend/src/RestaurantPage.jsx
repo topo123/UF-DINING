@@ -68,9 +68,9 @@ function RestaurantPage() {
         ) : (
           menu.map((item) => (
               <div key={item.ID} className="menu-item-card">
-             
                 <div className='menu-item-details'>
-                  <h2 className='menu-item-name'>{item.Name}</h2>
+                  <h2 className='menu-item-name'>{item.Name}
+                    </h2>
                   <p className='menu-item-price'>${item.Price.toFixed(2)}</p>
                   <div className='menu-item-rating'>
                     {item.RateCount > 0 ? (
@@ -86,7 +86,6 @@ function RestaurantPage() {
                       key={attr} 
                       className={`${attr}`}
                       >
-                        🏷️{attr}
                         {attr === "Vegan" && (
                         <svg
                           className="tag-badge"
@@ -112,6 +111,7 @@ function RestaurantPage() {
                           </svg>
                         )}
                         {" "}
+                        {attr}
                       </span>
                     ))}
                     </div>
