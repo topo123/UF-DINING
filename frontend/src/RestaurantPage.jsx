@@ -73,10 +73,18 @@ function RestaurantPage() {
   const [calorieLimit, setCalorieLimit] = useState(1000);
   const [minRating, setMinRating] = useState(0);
   const [userRatings, setUserRatings] = useState({});
+  const [ratingToggles, setRatingToggles] = useState({});
 
   if (!restaurant) {
     return <div>No data found for this restaurant.</div>
   }
+
+  const toggleRating = (itemId) => {
+    setRatingToggles(prev => ({
+      ...prev,
+      [itemId]: !prev[itemId]
+    }));
+  };
 
   useEffect(() => {
     fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`)
@@ -231,11 +239,20 @@ function RestaurantPage() {
                     ))}
                     </div>
                     <div className="menu-item-user-rating">
+                      {!ratingToggles[item.ID] ? (
+                        <button onClick={() => toggleRating(item.ID)}>RATE</button>
+                      ) : (
+                        <>
                     <EditableStarBar
                       rating={userRatings[item.ID] || 0}
                       onRate={(value) => handleUserRate(item.ID, value)}
                     />
-                    {(userRatings[item.ID] || 0) > 0 && <span> Your rating: {(userRatings[item.ID] || 0).toFixed(1)}</span>}
+                    <button onClick={() => toggleRating(item.ID)} style={{ marginLeft: "8px"}}>
+                      Cancel
+                    </button>
+                    {(userRatings[item.ID] || 0) > 0 && (<span style={{ marginLeft: "8px" }}> Your rating: {(userRatings[item.ID] || 0).toFixed(1)}</span>)}
+                    </>
+                    )}
                   </div>
                 </div>
               </div>
