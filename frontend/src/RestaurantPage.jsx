@@ -121,6 +121,13 @@ function RestaurantPage() {
   .then(data => {
     console.log('Rating submitted successfully', data);
   })
+  .then(data => {
+    console.log('Rating submitted successfully', data);
+    fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`)
+      .then((response) => response.json())
+      .then((updatedMenu) => setMenu(updatedMenu))
+      .catch((err) => console.error('Error refreshing menu:', err));
+  })
   .catch(err => console.error(err));
 };
 
