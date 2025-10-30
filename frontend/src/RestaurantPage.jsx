@@ -25,7 +25,12 @@ export function StarBar({ rating }) {
       stars.push(<span key={i} className="star-empty">★</span>);
     }
   }
-  return <div className="star-bar">{rating}{stars}</div>;
+  return (
+    <div className="star-bar">
+      <span className="rating-value">{Number(rating).toFixed(1)}</span>
+      <div className="stars-wrapper">{stars}</div>
+    </div>
+  );
 }
 
 function RestaurantPage() {
@@ -76,7 +81,7 @@ function RestaurantPage() {
                   <div className='menu-item-rating'>
                     {item.RateCount > 0 ? (
                       <>
-                        <StarBar rating={(item.StarCount / item.RateCount).toFixed(1)} />
+                        <StarBar rating={(item.StarCount / item.RateCount)} />
                         <span className='review-count'>({item.RateCount})</span>
                       </>
                     )  :  "No ratings"}
