@@ -37,6 +37,9 @@ function RestaurantPage() {
   const { state } = useLocation();
   const[menu, setMenu] = useState([]);
   const restaurant  = state?.restaurant;
+  const [priceLimit, setPriceLimit] = useState(30);
+  const [calorieLimit, setCalorieLimit] = useState(1000);
+  const [minRating, setMinRating] = useState(0);
 
   if (!restaurant) {
     return <div>No data found for this restaurant.</div>
@@ -54,6 +57,14 @@ function RestaurantPage() {
       });
   }, [restaurant]);
 
+  const filteredMenu = menu.filter((item => {
+    const avgRating = item.RateCount > 0 ? item.StarCount / item.RateCount : 0;
+    return (
+      item.Price <= priceLimit &&
+      item.Calories <= calorieLimit &&
+      avgRating >= minRating
+    )
+  }))
 
   return (
     <div className="App">
@@ -62,11 +73,47 @@ function RestaurantPage() {
           <p>{restaurant.Address}</p>
           <p>{restaurant.OpenTime} - {restaurant.CloseTime}</p>
       </div>
+      <div className="filter-sliders">
+        <div className="filter">
+          <label>💲 Max Price: ${priceLimit}</label>
+          <input
+            type='range'
+            min='0'
+            max='30'
+            step='1'
+            value={priceLimit}
+            onChange={(e) => setPriceLimit(Number(e.target.value))}
+            />
+        </div>
+        <div className="filter">
+          <label>🥗 Max Calories: {calorieLimit}</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="1000" 
+            step="50"
+            value={calorieLimit} 
+            onChange={(e) => setCalorieLimit(Number(e.target.value))} 
+          />
+        </div>
+
+        <div className="filter">
+          <label>⭐ Min Rating: {minRating}</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="5" 
+            step="0.5"
+            value={minRating} 
+            onChange={(e) => setMinRating(Number(e.target.value))} 
+          />
+        </div>
+      </div>
       <div className="card-container">
-        {!menu || menu.length === 0 ? (
+        {filteredMenu.length === 0 ? (
           <p className='no-menu'>No menu items available.</p>
         ) : (
-          menu.map((item) => (
+          filteredMenu.map((item) => (
               <div key={item.ID} className="menu-item-card">
                 <div className='menu-item-details'>
                   <div className = 'menu-item-calories'>{item.Calories} calories
