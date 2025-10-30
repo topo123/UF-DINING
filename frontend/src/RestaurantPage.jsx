@@ -68,13 +68,7 @@ function RestaurantPage() {
         ) : (
           menu.map((item) => (
               <div key={item.ID} className="menu-item-card">
-                {item.Thumbnail && (
-                  <img 
-                    src={item.Thumbnail} 
-                    alt={item.Name} 
-                    className="thumbnail" 
-                  />
-                )}
+             
                 <div className='menu-item-details'>
                   <h2 className='menu-item-name'>{item.Name}</h2>
                   <p className='menu-item-price'>${item.Price.toFixed(2)}</p>

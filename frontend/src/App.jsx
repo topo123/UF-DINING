@@ -58,13 +58,6 @@ function App() {
             className="restaurant-card"
             state={{ restaurant}}
           >
-            {restaurant.Thumbnail && (
-              <img 
-                src={restaurant.Thumbnail} 
-                alt={restaurant.Name} 
-                className="thumbnail" 
-              />
-            )}
             <h2 className='restaurant-name'>{restaurant.Name}</h2>
             <p>{restaurant.Address}</p>
             <p>{restaurant.OpenTime} - {restaurant.CloseTime}</p>
