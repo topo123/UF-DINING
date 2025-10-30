@@ -69,8 +69,41 @@ function RestaurantPage() {
           menu.map((item) => (
               <div key={item.ID} className="menu-item-card">
                 <div className='menu-item-details'>
-                  <h2 className='menu-item-name'>{item.Name}
-                    </h2>
+                  <h2 className='menu-item-name'>
+                    {item.Name}
+                    {item.Attributes && item.Attributes.length > 0 && (
+                      <span className='menu-item-tag-inline'>
+                        {item.Attributes.map((attr) => (
+                          <span key={attr} className={`${attr}`}>
+                            {attr === "Vegan" && (
+                              <svg
+                                className="tag-badge"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                style={{ marginLeft: "4px" }}
+                              >
+                                <circle cx="8" cy="8" r="8" fill="#4CAF50"/>
+                                <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">VG</text>
+                              </svg>
+                            )}
+                            {attr === "Vegetarian" && (
+                              <svg
+                                className="tag-badge"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                style={{ marginLeft: "4px" }}
+                              >
+                                <circle cx="8" cy="8" r="8" fill = "#FF9800"/>
+                                <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">V</text>
+                              </svg>
+                            )}
+                          </span>
+                        ))}
+                      </span>
+                    )}
+                  </h2>
                   <p className='menu-item-price'>${item.Price.toFixed(2)}</p>
                   <div className='menu-item-rating'>
                     {item.RateCount > 0 ? (
@@ -80,41 +113,6 @@ function RestaurantPage() {
                       </>
                     )  :  "No ratings"}
                   </div>
-                  <div className='menu-item-tags'>
-                    {item.Attributes && item.Attributes.length > 0 && item.Attributes.map((attr) => (
-                      <span 
-                      key={attr} 
-                      className={`${attr}`}
-                      >
-                        {attr === "Vegan" && (
-                        <svg
-                          className="tag-badge"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          style={{ marginLeft: "4px" }}
-                        >
-                          <circle cx="8" cy="8" r="8" fill="#4CAF50"/>
-                          <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">VG</text>
-                      </svg>
-                        )}
-                        {attr === "Vegetarian" && (
-                          <svg
-                            className="tag-badge"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            style={{ marginLeft: "4px" }}
-                          >
-                            <circle cx="8" cy="8" r="8" fill = "#FF9800"/>
-                            <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">V</text>
-                          </svg>
-                        )}
-                        {" "}
-                        {attr}
-                      </span>
-                    ))}
-                    </div>
                 </div>
               </div>
             ))
