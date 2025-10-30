@@ -4,28 +4,87 @@ import { useParams, useLocation } from 'react-router-dom';
 import './RestaurantPage.css'
 
 
-function StarBar({ rating }) {
+export function StarBar({ rating }) {
+  rating = parseFloat(rating);
   const stars = [];
+
+  const fullStars = Math.floor(rating);
+  const decimal = rating - fullStars;
+
+  const hasHalf = decimal >= 0.25 && decimal < 0.75;
+  const hasExtraFull = decimal >= 0.75;
+
   for (let i = 1; i <= 5; i++) {
-    if (i <= Math.floor(rating)) {
+    if (i <= fullStars) {
       stars.push(<span key={i} className="star-filled">★</span>);
-    } else if (i - rating < 1) {
+    } else if (i === fullStars + 1 && hasHalf) {
       stars.push(<span key={i} className="star-half">★</span>);
+    } else if (i === fullStars + 1 && hasExtraFull) {
+      stars.push(<span key={i} className="star-filled">★</span>);
     } else {
       stars.push(<span key={i} className="star-empty">★</span>);
     }
   }
-  return <div className="star-bar">{stars}</div>;
+  return (
+    <div className="star-bar">
+      <span className="rating-value">{Number(rating).toFixed(1)}</span>
+      <div className="stars-wrapper">{stars}</div>
+    </div>
+  );
 }
+
+function EditableStarBar({ rating, onRate }) {
+  const [hover, setHover] = useState(0);
+
+  const displayRating = hover || rating;
+
+  return (
+    <div className="editable-stars" style={{ display: "flex", cursor: "pointer" }}>
+      {[1, 2, 3, 4, 5].map((star) => {
+        let starClass = "star-empty";
+        if (displayRating >= star) starClass = "star-filled";
+        else if (displayRating >= star - 0.5) starClass = "star-half";
+
+        return (
+          <span
+            key={star}
+            className={starClass}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+            onClick={() => onRate(star)}
+            style={{ fontSize: "1.2rem", marginRight: "2px" }}
+          >
+            ★
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+
+
 
 function RestaurantPage() {
   const { state } = useLocation();
   const[menu, setMenu] = useState([]);
   const restaurant  = state?.restaurant;
+  const [priceLimit, setPriceLimit] = useState(30);
+  const [calorieLimit, setCalorieLimit] = useState(1000);
+  const [minRating, setMinRating] = useState(0);
+  const [userRatings, setUserRatings] = useState({});
+  const [ratingToggles, setRatingToggles] = useState({});
 
   if (!restaurant) {
     return <div>No data found for this restaurant.</div>
   }
+
+  const toggleRating = (itemId) => {
+    setRatingToggles(prev => ({
+      ...prev,
+      [itemId]: !prev[itemId]
+    }));
+  };
 
   useEffect(() => {
     fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`)
@@ -39,6 +98,47 @@ function RestaurantPage() {
       });
   }, [restaurant]);
 
+  const filteredMenu = menu.filter((item => {
+    const avgRating = item.RateCount > 0 ? item.StarCount / item.RateCount : 0;
+    return (
+      item.Price <= priceLimit &&
+      item.Calories <= calorieLimit &&
+      avgRating >= minRating
+    )
+  }))
+  
+  const handleUserRate = (itemId, value) => {
+  setUserRatings((prev) => ({
+    ...prev,
+    [itemId]: value,
+  }));
+
+  fetch('http://localhost:8080/rating', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      itemId: itemId,
+      userId: currentUser.id, 
+      rating: value
+    }),
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Failed to submit rating');
+    return res.json();
+  })
+  .then(data => {
+    console.log('Rating submitted successfully', data);
+  })
+  .then(data => {
+    console.log('Rating submitted successfully', data);
+    fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`)
+      .then((response) => response.json())
+      .then((updatedMenu) => setMenu(updatedMenu))
+      .catch((err) => console.error('Error refreshing menu:', err));
+  })
+  .catch(err => console.error(err));
+};
+
 
   return (
     <div className="App">
@@ -47,22 +147,89 @@ function RestaurantPage() {
           <p>{restaurant.Address}</p>
           <p>{restaurant.OpenTime} - {restaurant.CloseTime}</p>
       </div>
+      <div className="filter-sliders">
+        <div className="filter">
+          <label>💲 Max Price: ${priceLimit}</label>
+          <input
+            type='range'
+            min='0'
+            max='30'
+            step='1'
+            value={priceLimit}
+            onChange={(e) => setPriceLimit(Number(e.target.value))}
+            />
+        </div>
+        <div className="filter">
+          <label>🥗 Max Calories: {calorieLimit}</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="1000" 
+            step="50"
+            value={calorieLimit} 
+            onChange={(e) => setCalorieLimit(Number(e.target.value))} 
+          />
+        </div>
+
+        <div className="filter">
+          <label>⭐ Min Rating: {minRating}</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="5" 
+            step="0.5"
+            value={minRating} 
+            onChange={(e) => setMinRating(Number(e.target.value))} 
+          />
+        </div>
+      </div>
       <div className="card-container">
-        {!menu || menu.length === 0 ? (
+        {filteredMenu.length === 0 ? (
           <p className='no-menu'>No menu items available.</p>
         ) : (
-          menu.map((item) => (
+          filteredMenu.map((item) => (
               <div key={item.ID} className="menu-item-card">
-                {item.Thumbnail && (
-                  <img 
-                    src={item.Thumbnail} 
-                    alt={item.Name} 
-                    className="thumbnail" 
-                  />
-                )}
                 <div className='menu-item-details'>
-                  <h2 className='menu-item-name'>{item.Name}</h2>
+                   <h2 className='menu-item-name'>
+                    {item.Name}
+                    
+                    {item.Attributes && item.Attributes.length > 0 && (
+                      <span className='menu-item-tag-inline'>
+                        {item.Attributes.map((attr) => (
+                          <span key={attr} className={`${attr}`}>
+                            {attr === "Vegan" && (
+                              <svg
+                                className="tag-badge"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                style={{ marginLeft: "4px" }}
+                              >
+                                <circle cx="8" cy="8" r="8" fill="#4CAF50"/>
+                                <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">VG</text>
+                              </svg>
+                            )}
+                            {attr === "Vegetarian" && (
+                              <svg
+                                className="tag-badge"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                style={{ marginLeft: "4px" }}
+                              >
+                                <circle cx="8" cy="8" r="8" fill = "#FF9800"/>
+                                <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">V</text>
+                              </svg>
+                            )}
+                          </span>
+                        ))}
+                      </span>
+                     )}
+                  </h2>
+                  <div className='menu-item-calories'>{item.Calories} calories</div>
+
                   <p className='menu-item-price'>${item.Price.toFixed(2)}</p>
+
                   <div className='menu-item-rating'>
                     {item.RateCount > 0 ? (
                       <>
@@ -70,6 +237,22 @@ function RestaurantPage() {
                         <span className='review-count'>({item.RateCount})</span>
                       </>
                     )  :  "No ratings"}
+                  </div>
+                    <div className="menu-item-user-rating">
+                      {!ratingToggles[item.ID] ? (
+                        <button onClick={() => toggleRating(item.ID)}>RATE</button>
+                      ) : (
+                        <>
+                    <EditableStarBar
+                      rating={userRatings[item.ID] || 0}
+                      onRate={(value) => handleUserRate(item.ID, value)}
+                    />
+                    <button onClick={() => toggleRating(item.ID)} style={{ marginLeft: "8px"}}>
+                      Cancel
+                    </button>
+                    {(userRatings[item.ID] || 0) > 0 && (<span style={{ marginLeft: "8px" }}> Your rating: {(userRatings[item.ID] || 0).toFixed(1)}</span>)}
+                    </>
+                    )}
                   </div>
                 </div>
               </div>

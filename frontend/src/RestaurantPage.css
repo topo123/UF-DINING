@@ -17,12 +17,20 @@
 .menu-item-card{
     background-color: var(--card-bg-color);
     width: 18rem;
+    justify-content: center;
+    align-items: center;
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 3px 6px rgba(0,0,0,0.3);
     text-align: left;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
+    padding: 0.5rem
+}
+
+.menu-item-card h2,
+.menu-item-card p {
+    margin: 0;
 }
 
 .menu-item-card:hover {
@@ -37,12 +45,14 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.3rem;
+  padding-bottom: 0.2rem;
 }
 
 .menu-item-price {
   font-weight: bold;
   color: var(--accent-color);
   margin-bottom: 0.3rem;
+  padding-bottom: 0.7rem;
 }
 
 .menu-item-rating {
@@ -51,6 +61,7 @@
   gap: 0.25rem;
   font-size: 0.9rem;
   color: #bbb;
+  margin-bottom: 8px;
 }
 
 .no-menu {
@@ -60,7 +71,23 @@
 }
 
 .star-bar {
-  display: flex;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.rating-value {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--primary-color);
+  text-align: right;
+}
+
+.stars-wrapper {
+  display: inline-flex;
+  align-items: center;
   gap: 0.1rem;
 }
 
@@ -69,17 +96,20 @@
 }
 
 .star-half {
-    color: #ffe234;  
-    position: relative;
+  position: relative;
+  display: inline-block;
+  color: #555;
 }
 
-.star-half::after {
+
+.star-half::before {
   content: '★';
-  color: #555;
   position: absolute;
-  left: 50%;
+  left: 0;
   width: 50%;
   overflow: hidden;
+  color: #ffe234;
+  z-index: 1;
 }
 
 .star-empty {
@@ -88,4 +118,26 @@
 
 .review-count {
   color: #888;
+}
+
+
+
+.Vegan{
+  color: #4CAF50;
+}
+
+.Vegetarian{
+  color: #FF9800
+}
+
+.menu-item-tags{
+  font-family: 'Roboto', sans-serif;
+}
+
+.menu-item-calories{
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  color: #808080;
 }

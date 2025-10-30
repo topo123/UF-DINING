@@ -15,6 +15,7 @@ type MenuItem struct {
 	ID           bson.ObjectID `bson:"_id,omitempty"`
 	RestaurantID bson.ObjectID `bson:"restaurant_id"`
 	Price        float64       `bson:"price"`
+	Calories     int           `bson:"calories"`
 	Name         string        `bson:"name"`
 	RateCount    int           `bson:"rate_count"`
 	StarCount    int           `bson:"star_count"`

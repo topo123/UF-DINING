@@ -9,15 +9,16 @@ body {
   margin: 0;
   background-color: var(--bg-color);
   font-family: 'Inter', sans-serif;
-  color: var(--primary-color)
+  color: var(--primary-color);
 }
 
 .App {
   padding: 2rem;
   text-align: center;
+  min-height: 100vh;
 }
 
-.title{
+.title {
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 2rem;
@@ -26,59 +27,40 @@ body {
   padding-bottom: 0.5rem;
 }
 
-.search-bar {
-  width: 19rem;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #444;
-  background-color: #1f1f1f;
-  color: var(--primary-color);
-  outline: none;
-  margin-bottom: 2rem;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 0.25rem;
-}
-
-.search-bar:focus {
-  border-color: var(--accent-color);
-}
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
-.restaurant-card {
-  text-decoration: none;
-  color: inherit;
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
   background-color: var(--card-bg-color);
-  width: 18rem;
-  padding: 1rem;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-  text-align: left;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   border-radius: 0.5rem;
-  cursor: pointer;
 }
 
-.restaurant-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+.form-group {
+  text-align: left;
+  margin-bottom: 1rem;
 }
 
-.restaurant-name {
-  font-size: 1.25rem;
-  font-weight: 600;
+.form-group label {
+  display: block;
   margin-bottom: 0.5rem;
 }
 
-.restaurant-address,
-.restaurant-hours {
-  font-size: 0.9rem;
-  color: #bbb;
-  margin-bottom: 0.3rem
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #444;
+  background-color: #1f1f1f;
+  color: var(--primary-color);
+  border-radius: 0.25rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
 }
