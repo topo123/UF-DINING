@@ -63,6 +63,7 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border-radius: 0.5rem;
   cursor: pointer;
+  padding-bottom: 1.5rem;
 }
 
 .restaurant-card:hover {
@@ -74,6 +75,7 @@ body {
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 .restaurant-address,
@@ -96,12 +98,7 @@ body {
   font-size: 1.2rem;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
+
 
 .profile-section {
   display: flex;

@@ -43,7 +43,7 @@ function App() {
       </h1>
       <div className="login-container">
         <form onSubmit={handleSubmit} className="login-form">
-          <h2>{isSignup ? "Sign Up" : "Log In"}</h2>
+          <h2 className='login-title'>{isSignup ? "Sign Up" : "Log In"}</h2>
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
