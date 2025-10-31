@@ -12,7 +12,7 @@ import (
 type RestaurantRepository interface {
 	GetRestaurants(ctx context.Context) ([]models.Restaurant, error)
 	GetMenuByRestaurantID(ctx context.Context, restaurantID string) ([]models.MenuItem, error)
-	UpdateNewRating(ctx context.Context, menuItemID string, rating int) error
+	UpdateNewRating(ctx context.Context, menuItemID string, userID string, oldRating int32, newRating int32) error
 	GetRating(ctx context.Context, userID string, menuItemID string) (int32, error)
 }
 
@@ -43,7 +43,7 @@ func (r *restaurantRepo) GetRating(ctx context.Context, userID string, menuItemI
 		return -1, err
 	}
 
-	cursor, err := collection.Find(ctx, bson.M{"menu_item_id": menuItemObjectID})
+	cursor, err := collection.Find(ctx, bson.M{"menu_item_id": menuItemObjectID, "user_id": userID})
 
 	if err != nil {
 		return -1, err
@@ -113,24 +113,63 @@ func (r *restaurantRepo) GetMenuByRestaurantID(ctx context.Context, restaurantID
 	return menuItems, nil
 }
 
-func (r *restaurantRepo) UpdateNewRating(ctx context.Context, menuItemID string, rating int) error {
+func (r *restaurantRepo) UpdateNewRating(ctx context.Context, menuItemID string, userID string, oldRating int32, newRating int32) error {
 	// Implementation to update new rating for a menu item in the database
 	menuItemObjectID, err := bson.ObjectIDFromHex(menuItemID)
 	if err != nil {
 		return err
 	}
 
-	collection := r.dbClient.Database(r.dbName).Collection(r.menuItemsCollectionName)
+	menu_collection := r.dbClient.Database(r.dbName).Collection(r.menuItemsCollectionName)
+	user_collection := r.dbClient.Database(r.dbName).Collection(r.reviewCollectionName)
 
-	_, err = collection.UpdateByID(ctx, menuItemObjectID, bson.M{
-		"$inc": bson.M{
-			"rate_count": 1,
-			"star_count": rating,
-		},
-	})
+	if oldRating == -1 {
+		fmt.Println("A new review to be added")
+		_, err = user_collection.InsertOne(ctx, bson.M{
+			"menu_item_id": menuItemObjectID,
+			"user_id":      userID,
+			"rating":       newRating,
+		})
 
-	if err != nil {
-		return err
+		if err != nil {
+			return err
+		}
+		_, err = menu_collection.UpdateByID(ctx, menuItemObjectID, bson.M{
+			"$inc": bson.M{
+				"rate_count": 1,
+				"star_count": newRating,
+			},
+		})
+
+		if err != nil {
+			return err
+		}
+
+	} else {
+
+		fmt.Println("DB already has this review")
+		user_collection_filter := bson.M{"user_id": userID}
+		user_collection_update := bson.M{
+			"$set": bson.M{
+				"rating": newRating,
+			},
+		}
+
+		_, err = user_collection.UpdateOne(ctx, user_collection_filter, user_collection_update)
+
+		if err != nil {
+			return err
+		}
+
+		_, err = menu_collection.UpdateByID(ctx, menuItemObjectID, bson.M{
+			"$inc": bson.M{
+				"star_count": newRating - oldRating,
+			},
+		})
+
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
