@@ -76,4 +76,5 @@ func (h *restaurantHandler) UpdateNewRating(c *gin.Context) {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
+	c.JSON(200, gin.H{"message": "Rating updated successfully"})
 }
