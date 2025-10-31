@@ -69,10 +69,10 @@ func (h *restaurantHandler) UpdateNewRating(c *gin.Context) {
 		return
 	}
 
-	user_rating, err := h.service.GetRating(c, req.UserID, req.MenuItemID)
-	error := h.service.UpdateNewRating(c, req.MenuItemID, req.UserID, user_rating, req.Rating)
+	user_rating, _ := h.service.GetRating(c, req.UserID, req.MenuItemID)
+	err := h.service.UpdateNewRating(c, req.MenuItemID, req.UserID, user_rating, req.Rating)
 
-	if error != nil {
+	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
