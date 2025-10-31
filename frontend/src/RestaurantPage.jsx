@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react'
 import { useParams, useLocation } from 'react-router-dom';
 import './RestaurantPage.css'
+import { getAuth } from "firebase/auth";
 
 
 export function StarBar({ rating }) {
@@ -74,6 +75,10 @@ function RestaurantPage() {
   const [minRating, setMinRating] = useState(0);
   const [userRatings, setUserRatings] = useState({});
   const [ratingToggles, setRatingToggles] = useState({});
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
+ 
 
   if (!restaurant) {
     return <div>No data found for this restaurant.</div>
@@ -108,35 +113,38 @@ function RestaurantPage() {
   }))
   
   const handleUserRate = (itemId, value) => {
-  setUserRatings((prev) => ({
-    ...prev,
-    [itemId]: value,
-  }));
+    setUserRatings((prev) => ({
+      ...prev,
+      [itemId]: value,
+    }));
 
-  fetch('http://localhost:8080/rating', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      itemId: itemId,
-      userId: currentUser.id, 
-      rating: value
-    }),
-  })
-  .then(res => {
-    if (!res.ok) throw new Error('Failed to submit rating');
-    return res.json();
-  })
-  .then(data => {
-    console.log('Rating submitted successfully', data);
-  })
-  .then(data => {
-    console.log('Rating submitted successfully', data);
-    fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`)
-      .then((response) => response.json())
-      .then((updatedMenu) => setMenu(updatedMenu))
-      .catch((err) => console.error('Error refreshing menu:', err));
-  })
-  .catch(err => console.error(err));
+    console.log(currentUser.uid, itemId, value);
+
+    fetch('http://localhost:8080/rating', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        menu_item_id: itemId,
+        user_id: currentUser.uid, 
+        rating: value,
+      }),
+    })
+    
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to submit rating');
+      return res.json();
+    })
+    .then(data => {
+      console.log('Rating submitted successfully', data);
+    })
+    .then(data => {
+      console.log('Rating submitted successfully', data);
+      fetch(`http://localhost:8080/restaurants/${restaurant.ID}/menu`)
+        .then((response) => response.json())
+        .then((updatedMenu) => setMenu(updatedMenu))
+        .catch((err) => console.error('Error refreshing menu:', err));
+    })
+    .catch(err => console.error(err));
 };
 
 
@@ -247,8 +255,8 @@ function RestaurantPage() {
                       rating={userRatings[item.ID] || 0}
                       onRate={(value) => handleUserRate(item.ID, value)}
                     />
-                    <button onClick={() => toggleRating(item.ID)} style={{ marginLeft: "8px"}}>
-                      Cancel
+                    <button onClick={() => toggleRating(item.ID)} style={{ marginTop: "8px", marginLeft: "8px"}}>
+                      Exit
                     </button>
                     {(userRatings[item.ID] || 0) > 0 && (<span style={{ marginLeft: "8px" }}> Your rating: {(userRatings[item.ID] || 0).toFixed(1)}</span>)}
                     </>
