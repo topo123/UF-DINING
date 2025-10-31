@@ -46,22 +46,11 @@ function Restaurants() {
   return (
     <div className="App">
 
-      <div className="header">
-        <h1 className='title'>
-          Dinr        
-        </h1>
+  
+    <h1 className='title'>
+      Dinr        
+    </h1>
 
-        <div className="profile-section" onClick={goToProfile}>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            alt="Profile"
-            className="profile-avatar"
-          />
-          {user && (
-            <p className="profile-uid">{user.uid}</p>
-          )}
-        </div>
-      </div>
 
 
 

@@ -35,9 +35,17 @@ body {
   border-radius: 0.5rem;
 }
 
+.login-title {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 0rem;
+}
+
 .form-group {
   text-align: left;
   margin-bottom: 1rem;
+  padding-right: 1.5rem;
 }
 
 .form-group label {
