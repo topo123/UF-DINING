@@ -2,23 +2,13 @@
 
 **API Paths**
 
-GET /restaurants
+GET /restaurants is a request that pulls all restaurants from our database and returns it
 
-- returns all restaurants in the database
-- no parameters
+GET /restaurants/:id/menu is a request that pulls all menu items for a certain restaurant using a database object id, and supports loading and viewing menus in our frontend.
 
-GET /restaurants/:id/menu
+GET /rating/:menu_id/menu/:user_id/user is a request that indicates whether a user has made a rating for a certain menu item already, and what that rating is.
 
-- returns all menu items corresponding to a restaurant id
-- "id" parameter in url
-- Ex: http://localhost:8080/restaurants/69002374f5ea4362ea4ba204/menu
-
-POST /rating
-
-- adds 1 rating to a menu item
-- parameter body has 2 fields
-  -- menu_item_id string
-  -- rating int (rating 1-5 stars)
+POST /rating is a request that requires a user id, menu item id, and rating in the request body, and allows the frontend to update or create a new review for a menu item.
 
 **Database Setup/Structure**
 
@@ -32,17 +22,3 @@ The DB has a "Restaurants" collection, and a "Menu_Items" collection
 There are currently some dummy variables inside that can be seen using the /GET commands.
 
 Message Hugo on whatsapp for more info or if you need direct mongoDB platform access
-
-**TODO**
-
-We can choose to add an admin portal that allows us to modify/add/delete stuff directly in the app
-
-- new endpoints for CRUD operations
-- WIll also need frontend work, so don't start without talking to frontend team
-
-User login and rating memory
-
-- We should have users, each with an user id
-- When a user rates something, we should store that theyve made this rating somewhere
-- Then, we can delete the rating or update it in the future, if they re-rate a certain item
-- Needs some frontend work for auth also, talk to frontend team, and I can help with database setup
