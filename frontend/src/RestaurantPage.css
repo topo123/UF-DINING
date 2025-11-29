@@ -160,4 +160,50 @@ button:hover{
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+.filter-dietary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.filter-dietary label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.dietary-filter-boxes {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.dietary-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background-color: var(--card-bg-color);
+  border: 2px solid #ddd;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--primary-color);
+}
+
+.dietary-filter-btn:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.dietary-filter-btn.active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3);
+}
+
 

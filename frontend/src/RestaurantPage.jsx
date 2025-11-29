@@ -75,6 +75,7 @@ function RestaurantPage() {
   const [minRating, setMinRating] = useState(0);
   const [userRatings, setUserRatings] = useState({});
   const [ratingToggles, setRatingToggles] = useState({});
+  const [dietaryFilters, setDietaryFilters] = useState({ vegan: false, vegetarian: false });
   const auth = getAuth();
   const currentUser = auth.currentUser;
 
@@ -105,6 +106,16 @@ function RestaurantPage() {
 
   const filteredMenu = menu.filter((item => {
     const avgRating = item.RateCount > 0 ? item.StarCount / item.RateCount : 0;
+    
+    // Check dietary filters
+    const hasSelectedDiet = dietaryFilters.vegan || dietaryFilters.vegetarian;
+    if (hasSelectedDiet) {
+      const itemAttributes = item.Attributes || [];
+      const matchesDiet = (dietaryFilters.vegan && itemAttributes.includes("Vegan")) ||
+                          (dietaryFilters.vegetarian && itemAttributes.includes("Vegetarian"));
+      if (!matchesDiet) return false;
+    }
+    
     return (
       item.Price <= priceLimit &&
       item.Calories <= calorieLimit &&
@@ -189,6 +200,32 @@ function RestaurantPage() {
             value={minRating} 
             onChange={(e) => setMinRating(Number(e.target.value))} 
           />
+        </div>
+
+        <div className="filter-dietary">
+          <label>Dietary Preferences:</label>
+          <div className="dietary-filter-boxes">
+            <button 
+              className={`dietary-filter-btn ${dietaryFilters.vegan ? 'active' : ''}`}
+              onClick={() => setDietaryFilters(prev => ({ ...prev, vegan: !prev.vegan }))}
+            >
+              <svg className="tag-badge" width="20" height="20" viewBox="0 0 16 16">
+                <circle cx="8" cy="8" r="8" fill="#4CAF50"/>
+                <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">VG</text>
+              </svg>
+              Vegan
+            </button>
+            <button 
+              className={`dietary-filter-btn ${dietaryFilters.vegetarian ? 'active' : ''}`}
+              onClick={() => setDietaryFilters(prev => ({ ...prev, vegetarian: !prev.vegetarian }))}
+            >
+              <svg className="tag-badge" width="20" height="20" viewBox="0 0 16 16">
+                <circle cx="8" cy="8" r="8" fill="#FF9800"/>
+                <text x="8" y="12" textAnchor="middle" fontSize="10" fill="white">V</text>
+              </svg>
+              Vegetarian
+            </button>
+          </div>
         </div>
       </div>
       <div className="card-container">
